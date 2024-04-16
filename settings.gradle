@@ -1,0 +1,5 @@
+rootProject.name = 'Semestrovka'
+include 'spring-api'
+include 'spring-impl'
+include 'spring-db'
+

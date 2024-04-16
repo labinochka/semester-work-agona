@@ -1,0 +1,41 @@
+plugins {
+    id "nu.studer.jooq" version "8.0"
+}
+
+apply from: 'jooq.gradle'
+
+
+war.archiveFileName = "${project.name}.war"
+
+dependencies {
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    implementation project(':spring-api')
+    implementation project(':spring-db')
+    implementation 'org.jooq:jooq:3.16.18'
+    implementation 'org.liquibase:liquibase-core:3.10.3'
+    implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
+    implementation 'org.springframework.data:spring-data-jpa:2.6.2'
+    implementation 'org.hibernate:hibernate-core:5.6.5.Final'
+    implementation 'io.springfox:springfox-swagger2:2.9.2'
+    implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+    annotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final"
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs += [
+                    project(":spring-db").sourceSets.main.resources
+            ]
+        }
+    }
+}
+
+
+test {
+    useJUnitPlatform()
+}

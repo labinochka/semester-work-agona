@@ -1,0 +1,154 @@
+databaseChangeLog:
+  - changeSet:
+      id: '1'
+      author: mlabenskaya
+      preCondition:
+        - onFail: MARK_RAN
+        - not:
+            - tableExist:
+                tableName: account
+      changes:
+        - createTable:
+            tableName: account
+            columns:
+              - column:
+                  name: uuid
+                  type: uuid
+                  defaultValue: uuid_generate_v4()
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: account_uuid_pk
+              - column:
+                  name: username
+                  type: varchar
+                  constraints:
+                    unique: true
+                    uniqueConstraintName: account_username_uk
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: lastname
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar
+                  constraints:
+                    unique: true
+                    uniqueConstraintName: account_email_uk
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: '2'
+      author: mlabenskaya
+      preCondition:
+        - onFail: MARK_RAN
+        - not:
+            - tableExist:
+                tableName: post
+      changes:
+        - createTable:
+            tableName: post
+            columns:
+              - column:
+                  name: uuid
+                  type: uuid
+                  defaultValue: uuid_generate_v4()
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: post_uuid_pk
+              - column:
+                  name: author_uuid
+                  type: uuid
+                  constraints:
+                    foreignKeyName: post_account_fk
+                    references: account(uuid)
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: content
+                  type: varchar
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: '3'
+      author: mlabenskaya
+      preCondition:
+        - onFail: MARK_RAN
+        - not:
+            - tableExist:
+                tableName: image
+      changes:
+        - createTable:
+            tableName: image
+            columns:
+              - column:
+                  name: uuid
+                  type: uuid
+                  defaultValue: uuid_generate_v4()
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: image_uuid_pk
+              - column:
+                  name: post_uuid
+                  type: uuid
+                  constraints:
+                    foreignKeyName: image_post_fk
+                    references: post(uuid)
+                    nullable: false
+              - column:
+                  name: image_url
+                  type: varchar
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: '4'
+      author: mlabenskaya
+      preCondition:
+        - onFail: MARK_RAN
+        - not:
+            - tableExist:
+                tableName: comment
+      changes:
+        - createTable:
+            tableName: comment
+            columns:
+              - column:
+                  name: uuid
+                  type: uuid
+                  defaultValue: uuid_generate_v4()
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: comment_uuid_pk
+              - column:
+                  name: post_uuid
+                  type: uuid
+                  constraints:
+                    foreignKeyName: comment_post_fk
+                    references: post(uuid)
+                    nullable: false
+              - column:
+                  name: account_uuid
+                  type: uuid
+                  constraints:
+                    foreignKeyName: comment_account_fk
+                    references: account(uuid)
+                    nullable: false
+              - column:
+                  name: content
+                  type: varchar
+                  constraints:
+                    nullable: false
